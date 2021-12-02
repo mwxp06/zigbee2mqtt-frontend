@@ -4,6 +4,7 @@ import { GraphI, LinkI, LinkType, NodeI } from "./components/map/types";
 import { Theme } from "./components/theme-switcher";
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
+import { local } from "@toolz/local-storage";
 
 
 export const genDeviceDetailsLink = (deviceIdentifier: string | number): string => (`/device/${deviceIdentifier}`);
@@ -35,6 +36,9 @@ export interface ApiResponse<T> {
 
 
 export const lastSeen = (state: DeviceState, lastSeenType: LastSeenType): Date | undefined => {
+    if (!state.last_seen) {
+        return undefined;
+    }
     switch (lastSeenType) {
         case "ISO_8601":
         case "ISO_8601_local":
@@ -134,6 +138,7 @@ export const stringifyWithPreservingUndefinedAsNull = (data: Record<string, unkn
 export const isOnlyOneBitIsSet = (b: number): number | boolean => {
     return b && !(b & (b - 1));
 }
+const THEME_STORAGE_KEY = 'z2m-theme';
 
-export const getCurrentTheme = (): Theme => localStorage.getItem('theme') as Theme ?? 'light';
-export const saveCurrentTheme = (theme: string): void => localStorage.setItem('theme', theme);
+export const getCurrentTheme = (): Theme => local.getItem(THEME_STORAGE_KEY) as Theme ?? 'light';
+export const saveCurrentTheme = (theme: string): void => local.setItem(THEME_STORAGE_KEY, theme);

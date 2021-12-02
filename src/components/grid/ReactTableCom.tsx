@@ -4,8 +4,8 @@ import { useTable, useSortBy, HeaderGroup, Column, useAsyncDebounce, useGlobalFi
 import cx from "classnames";
 import { useTranslation } from "react-i18next";
 
-import { set, get } from "local-storage";
 import debounce from "lodash/debounce";
+import { local } from "@toolz/local-storage";
 
 interface Props {
   id: string;
@@ -18,8 +18,8 @@ function GlobalFilter({
   setGlobalFilter,
 }) {
   const [value, setValue] = React.useState(globalFilter)
-  const onChange = useAsyncDebounce(value => {
-    setGlobalFilter(value || undefined)
+  const onChange = useAsyncDebounce(v => {
+    setGlobalFilter(v || undefined)
   }, 200);
 
   const { t } = useTranslation(['common'])
@@ -39,8 +39,11 @@ function GlobalFilter({
   )
 }
 
+const TABLE_STORAGE_PREFFIX = 'z2m-';
+const getStorageKey = (id: string) => `${TABLE_STORAGE_PREFFIX}${id}`;
+
 const persist = debounce((key: string, data: Record<string, unknown>): void => {
-  set(key, data);
+  local.setItem(getStorageKey(key), data);
 })
 
 
@@ -53,8 +56,10 @@ const stateReducer = (newState: TableState<any>, action: ActionType, previousSta
   return newState;
 };
 
+
+
 export const Table: React.FC<Props> = ({ columns, data, id }) => {
-  const initialState = get<Partial<TableState<any>>>(id) || {};
+  const initialState = local.getItem<Partial<TableState<any>>>(getStorageKey(id)) || {};
   const {
     getTableProps,
     getTableBodyProps,
@@ -95,14 +100,14 @@ export const Table: React.FC<Props> = ({ columns, data, id }) => {
         {headerGroups.map((headerGroup: HeaderGroup<any>) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                <span className={cx({ 'btn btn-link': column.canSort })}>{column.render('Header')}</span>
+              <th className="text-nowrap" {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <span className={cx({ 'btn-link mr-1': column.canSort })}>{column.render('Header')}</span>
                 <span>
-                  {column.isSorted
-                    ? column.isSortedDesc
-                      ? <i className={`fa fa-sort-amount-down-alt`} />
-                      : <i className={`fa fa-sort-amount-down`} />
-                    : <i className={`fa fa-sort-amount-down invisible`} />}
+                <i className={cx('fa', {
+                  'fa-sort-amount-down invisible': !column.isSorted,
+                  'fa-sort-amount-down-alt': column.isSorted && !column.isSortedDesc,
+                  'fa-sort-amount-down': column.isSorted && column.isSortedDesc,
+                })} />
                 </span>
               </th>
             ))}

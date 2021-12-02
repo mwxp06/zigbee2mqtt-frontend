@@ -1,6 +1,6 @@
 import React from "react";
 
-import Form from "@rjsf/bootstrap-4";
+import Form from "@rjsf/core";
 import { JSONSchema7 } from "json-schema"
 import { KVP, Z2MConfig } from "../../types";
 import get from "lodash/get";
@@ -23,12 +23,11 @@ export default function ConfigureLogs(props: ConfigureLogsProps): JSX.Element {
     const formData = get(config, configKey, {});
     const _schema = get(schema, schemaKey, {});
     const handleChange = (params: ISubmitEvent<KVP | KVP[]>) => {
-        const { formData } = params;
         const payload = {};
-        set(payload, configKey, formData);
+        set(payload, configKey, params.formData);
         onChange(payload);
     }
-    return <Form schema={_schema as JSONSchema7} className={styles["hide-description"]}
+    return <Form schema={_schema} className={styles["hide-description"]}
         formData={formData}
         onChange={handleChange}
     ><div></div></Form>

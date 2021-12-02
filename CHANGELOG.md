@@ -1,3 +1,103 @@
+## [0.6.48](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.47...0.6.48) (2021-12-02)
+
+
+### Bug Fixes
+
+* **rjsf:** remove @rjsf/bootstrap-4 deps, fallback to bootsrap 3 styles ([1703e80](https://github.com/nurikk/zigbee2mqtt-frontend/commit/1703e80fd887d31c70c026e1e6ff59d5b771e93e))
+
+
+
+## [0.6.47](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.46...0.6.47) (2021-12-02)
+
+
+### Bug Fixes
+
+* **translations:** fix Availability type ([cf8cde9](https://github.com/nurikk/zigbee2mqtt-frontend/commit/cf8cde9f2b9945bde5e81be0c2fcf251d559b710))
+* **ZigbeeTable:** remove confusing spinner ([688a9be](https://github.com/nurikk/zigbee2mqtt-frontend/commit/688a9be9d0984bda93c23d2adeb974251def6370))
+
+
+
+## [0.6.46](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.45...0.6.46) (2021-12-01)
+
+
+
+## [0.6.45](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.44...0.6.45) (2021-12-01)
+
+
+### Features
+
+* **build:** add gzipped files to bundle ([83cee23](https://github.com/nurikk/zigbee2mqtt-frontend/commit/83cee23a628f4c87b08323592251a521b1c9f422))
+
+
+
+## [0.6.44](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.43...0.6.44) (2021-11-30)
+
+
+### Bug Fixes
+
+* **storage:** fix storage keys ([b2e2ca8](https://github.com/nurikk/zigbee2mqtt-frontend/commit/b2e2ca8ebee615b3a66225c2cf8d16ea56ec514e))
+
+
+
+## [0.6.43](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.42...0.6.43) (2021-11-30)
+
+
+### Features
+
+* **core:** refactor local storage component ([766b733](https://github.com/nurikk/zigbee2mqtt-frontend/commit/766b733a3f68fec758e7158c71382ff945483a7e))
+
+
+
+## [0.6.42](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.41...0.6.42) (2021-11-29)
+
+
+### Features
+
+* **avaliability:** support for per device config ([68809e8](https://github.com/nurikk/zigbee2mqtt-frontend/commit/68809e8cba50afa31fd7776fd785c1114142bc95))
+
+
+
+## [0.6.41](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.40...0.6.41) (2021-11-28)
+
+
+### Features
+
+* **availability:** implement availability feature ([3d21699](https://github.com/nurikk/zigbee2mqtt-frontend/commit/3d21699d41bfc2e0f615e75fc282fcf915239bb3))
+
+
+
+## [0.6.40](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.39...0.6.40) (2021-11-25)
+
+
+### Bug Fixes
+
+* **AddDeviceToGroup:** fix selection of non default endpoint ([bb8a211](https://github.com/nurikk/zigbee2mqtt-frontend/commit/bb8a2117fb66ebea42a4977e569b14f125fdf860))
+* **build:** downgrade react-router-dom ([a9d8fc1](https://github.com/nurikk/zigbee2mqtt-frontend/commit/a9d8fc1d2b19317f97a31effc9aa62a8ad3aa386))
+* **lastSeen:** fix handling undefined last_seen value ([84ec31f](https://github.com/nurikk/zigbee2mqtt-frontend/commit/84ec31f328df6b6860c1f42bdc7c1cc29cf3a5cb))
+* **sonar:** fix sonar warnings ([3ce5d7b](https://github.com/nurikk/zigbee2mqtt-frontend/commit/3ce5d7b422e3036cf30cb115155d2279db4f9c2b))
+* **style:** fix sonar cube errors ([f885e18](https://github.com/nurikk/zigbee2mqtt-frontend/commit/f885e1800cf927d5abcf95733b05751351f34e1a))
+
+
+
+## [0.6.39](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.38...0.6.39) (2021-11-22)
+
+
+### Bug Fixes
+
+* **table:** fix header margins ([4ec71de](https://github.com/nurikk/zigbee2mqtt-frontend/commit/4ec71de509627118a50b9dfe2caceb98c8acbcac))
+
+
+
+## [0.6.38](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.37...0.6.38) (2021-11-22)
+
+
+### Bug Fixes
+
+* **grid:** fix headers ([0b09316](https://github.com/nurikk/zigbee2mqtt-frontend/commit/0b09316b5d08367a851c4731dcefc48c28e48571))
+* **grid:** fix html ([43232ad](https://github.com/nurikk/zigbee2mqtt-frontend/commit/43232adc8ecc099e020241a34d37a02378196f5a))
+
+
+
 ## [0.6.37](https://github.com/nurikk/zigbee2mqtt-frontend/compare/0.6.36...0.6.37) (2021-11-22)
 
 

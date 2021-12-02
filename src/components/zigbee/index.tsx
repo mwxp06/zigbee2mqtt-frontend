@@ -3,7 +3,7 @@ import React, { Component, Fragment, ReactNode } from "react";
 import { Device, DeviceState, LastSeenType } from "../../types";
 import { Notyf } from "notyf";
 import { connect } from "unistore/react";
-import { GlobalState } from "../../store";
+import { GlobalState, OnlineOrOffline } from "../../store";
 import actions from "../../actions/actions";
 import style from "./style.css";
 import Spinner from "../spinner";
@@ -18,23 +18,46 @@ import PowerSource from "../power-source";
 import DeviceControlGroup from "../device-control/DeviceControlGroup";
 import { Table } from "../grid/ReactTableCom";
 import { CellProps, Column } from "react-table";
+import cx from "classnames";
 export interface ZigbeeTableData {
     id: string;
     device: Device;
     state: DeviceState;
+    avalilabilityState: OnlineOrOffline;
+    avalilabilityEnabledForDevice: boolean;
 }
 
 
-type PropsFromStore = Pick<GlobalState, 'devices' | 'deviceStates' | 'bridgeInfo'>;
+type PropsFromStore = Pick<GlobalState, 'devices' | 'deviceStates' | 'bridgeInfo' | 'avalilability'>;
 type ZigbeeTableProps = PropsFromStore & WithTranslation<"zigbee">;
 
 type DevicesTableProps = {
     data: ZigbeeTableData[];
     lastSeenType: LastSeenType;
+    availabilityFeatureEnabled: boolean;
+}
+type AvaliabilityStateProps = {
+    avaliability: OnlineOrOffline;
+    availabilityFeatureEnabled?: boolean;
+    avalilabilityEnabledForDevice?: boolean;
+}
+export function Avaliability(props: AvaliabilityStateProps) {
+    const { t } = useTranslation(["avaliability"]);
+    const { avaliability, availabilityFeatureEnabled = true, avalilabilityEnabledForDevice = true } = props;
+    if (availabilityFeatureEnabled && avalilabilityEnabledForDevice) {
+        return <span className={cx({
+            "text-danger animation-blinking": avaliability === "offline",
+            'text-success': avaliability === "online"
+        })}>{t(avaliability)}</span>
+    } else {
+        return <a target="_blank" rel="noopener noreferrer"
+            href="https://www.zigbee2mqtt.io/guide/configuration/device-availability.html#availability-advanced-configuration">{t('disabled')}</a>
+    }
+
 }
 function DevicesTable(props: DevicesTableProps) {
-    const { data, lastSeenType } = props;
-    const { t } = useTranslation(["zigbee", "common"]);
+    const { data, lastSeenType, availabilityFeatureEnabled } = props;
+    const { t } = useTranslation(["zigbee", "common", "avaliability"]);
 
     const columns: Column<ZigbeeTableData>[] = [
         {
@@ -91,6 +114,18 @@ function DevicesTable(props: DevicesTableProps) {
             Cell: ({ row: { original: { state } } }) => <LastSeen state={state} lastSeenType={lastSeenType} />,
 
         }] : []),
+        ...(availabilityFeatureEnabled ? [{
+            id: 'avaliability',
+            Header: t('avaliability:avaliability') as string,
+            accessor: ({ avalilabilityState }) => avalilabilityState,
+            Cell: ({ row: { original: { avalilabilityState, avalilabilityEnabledForDevice } } }) => {
+                return <Avaliability
+                    avaliability={avalilabilityState}
+                    avalilabilityEnabledForDevice={avalilabilityEnabledForDevice} />
+            }
+            ,
+        }] : []),
+
         {
             id: 'power',
             Header: t('power') as string,
@@ -106,7 +141,7 @@ function DevicesTable(props: DevicesTableProps) {
     ];
 
     return (<div className="card">
-        <div className="table-responsive mt-1">
+        <div className="table-responsive">
             <Table
                 id="zigbee"
                 columns={columns}
@@ -116,7 +151,8 @@ function DevicesTable(props: DevicesTableProps) {
     </div>);
 }
 export function ZigbeeTable(props: ZigbeeTableProps) {
-    const { devices, deviceStates, bridgeInfo } = props;
+    const { devices, deviceStates, bridgeInfo: { config }, avalilability } = props;
+    const availabilityFeatureEnabled = !!config.availability;
     const getDevicesToRender = (): ZigbeeTableData[] => {
         return Object.values(devices)
             .filter(device => device.type !== "Coordinator")
@@ -125,22 +161,22 @@ export function ZigbeeTable(props: ZigbeeTableProps) {
                 return {
                     id: device.friendly_name,
                     device,
-                    state
+                    state,
+                    avalilabilityState: avalilability[device.friendly_name] ?? "offline",
+                    avalilabilityEnabledForDevice: config.devices[device.ieee_address]?.availability !== false
                 } as ZigbeeTableData;
             });
     }
     const data = React.useMemo(() => getDevicesToRender(), [devices, deviceStates]);
 
+    return <DevicesTable
+        data={data}
+        lastSeenType={config.advanced.last_seen}
+        availabilityFeatureEnabled={availabilityFeatureEnabled}
+    />
 
-    if (Object.keys(data).length) {
-        return <DevicesTable data={data} lastSeenType={bridgeInfo.config.advanced.last_seen} />
-    } else {
-        return (<div className="h-100 d-flex justify-content-center align-items-center">
-            <Spinner />
-        </div>);
-    }
 }
 
-const mappedProps = ["devices", "deviceStates", "bridgeInfo"];
+const mappedProps = ["devices", "deviceStates", "bridgeInfo", "avalilability"];
 const ConnectedZigbeePage = withTranslation(["zigbee", "common"])(connect<unknown, unknown, PropsFromStore, unknown>(mappedProps, actions)(ZigbeeTable));
 export default ConnectedZigbeePage;
